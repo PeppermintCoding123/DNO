@@ -24,27 +24,30 @@ class f2:
         
 #%% optimisation
 #x0 = startvalue, a0 = initial stepwith, o = adaptive factor for a0, e = approx-closeness
-'''TODO:
-    -LISA:
-    - gradient alle schritte gehen, statt nur ergebniss
-    - diese ausführen mit quiver
-    Ergebniss solte so aussehen als ein Tupel oder Numpy-array. 
+
+'''---gradientDescent---
+Takes the arguments and itterates over them until the x* value is reaced in range of e.
+The result should be a np.array with all the steps, beginning with the starting coordinates. 
     [[x0,f(x0)],[x1,f(x1)],[x2,f(x2)],...]
-    '''
+'''
 def gradientDescent(f, x0, a0, o, e):
     ak = a0
     xk = x0
     fk1 = np.inf
-    fk = f(x0)
+    f_ = f()
+    fk = f_(xk)
+    res = []
+    res.append((xk,fk))
     while np.linalg.norm(fk1 - fk) >= e:
-        df = f.derivative(xk)
+        df = f_.derivative(xk)
         df = (1/np.linalg.norm(df)) * df
-        while f(xk - (ak * df)) >= fk:
+        while f_(xk - (ak * df)) >= fk:
             ak *= o
         xk = xk - ak * df
         fk1 = np.copy(fk)
-        fk = f(xk)
-    return [xk, fk]
+        fk = f_(xk)
+        res.append((xk,fk))
+    return np.array(res)
 
 def coordinateDescent(F,x0,a0,o,e):
     return None
@@ -90,7 +93,11 @@ surf = ax.plot_surface(x_grid, y_grid, z_grid, cmap=cm.PuBu, alpha=0.8)
 a0 = 1
 o = 0.5
 e = 1e-2
-
+'''TODO:
+- Lisa:
+- use quiver function of numpy
+- have arrows as previous version'''
+'''
 x0_0 = np.array([-5, -5])
 gd = gradientDescent(f1_, x0_0, a0, o, e)
 pnt_x, pnt_y = [x0_0[0], gd[0][0]], [x0_0[1], gd[0][1]]
@@ -101,7 +108,7 @@ x0_1 = np.array([-3, 2])
 gd = gradientDescent(f1_, x0_1, a0, o, e)
 pnt_x, pnt_y = [x0_1[0], gd[0][0]], [x0_1[1], gd[0][1]]
 pnt_z = np.array([f1_(p) for p in np.column_stack((pnt_x, pnt_y))]) # itteration over the column_stack and then applies the f1_(p) on it. p is a point in the given stack)
-ax.plot(pnt_x, pnt_y, pnt_z, 'y-o', linewidth=1, markersize=1)
+ax.plot(pnt_x, pnt_y, pnt_z, 'y-o', linewidth=1, markersize=1)'''
 
 # Labels
 ax.set_xlabel('X-Achse')
