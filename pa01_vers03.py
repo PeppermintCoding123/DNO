@@ -24,7 +24,13 @@ class f2:
         
 #%% optimisation
 #x0 = startvalue, a0 = initial stepwith, o = adaptive factor for a0, e = approx-closeness
-
+'''TODO:
+    -LISA:
+    - gradient alle schritte gehen, statt nur ergebniss
+    - diese ausführen mit quiver
+    Ergebniss solte so aussehen als ein Tupel oder Numpy-array. 
+    [[x0,f(x0)],[x1,f(x1)],[x2,f(x2)],...]
+    '''
 def gradientDescent(f, x0, a0, o, e):
     ak = a0
     xk = x0
