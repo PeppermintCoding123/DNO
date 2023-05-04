@@ -1,5 +1,5 @@
 '''TODO:
-
+###
     - implement other two approx methords
     - also visualize them
     - Visualize f2
