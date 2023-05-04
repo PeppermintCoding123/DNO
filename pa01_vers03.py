@@ -91,7 +91,8 @@ surf = ax.plot_surface(x_grid, y_grid, z_grid, cmap=cm.PuBu, alpha=0.8)
 
 # Gradient Descent
 a0 = 1
-o = 0.5
+#o = float(input("Wählen Sie sigma zwischen 0 und 1."))
+o = 0.5 #Wir setzen o hier 0.5, wenn das Programm funktioniert, erfolgt die Wahl von o durch Eingabe eines Wertes. (Diese Zeile wird gelöscht und dafür die obere genommen.)
 e = 1e-2
 '''TODO:
 - Lisa:
