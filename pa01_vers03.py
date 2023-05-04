@@ -62,6 +62,8 @@ Given Information to remember:
         -slider for o?
         -better colourscheme
         - turn the 3D Object automaticaly?
+      
+    quiver: Alle Startpunkte von Pfeilen, Richtungen von Pfeilen übergeben --> plottet Pfeil von aktueller iterierter zu nächster
 '''
 
 # construct x- & y-Values
