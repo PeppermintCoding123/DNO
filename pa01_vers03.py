@@ -22,6 +22,18 @@ class f1:
             return 10*x[1] - 6*x[0]
         else:
             raise ValueError('i must be 0 or 1')
+    #Aufteilen der Funktion für stochasticGradientDecent, direkt Bildung des Gradienten
+    def sgd_parts(self):
+        return 3
+    def sgd_derivative(self, x, i):
+        if i == 0:
+            return np.array([10*x[0], 0])
+        if i == 1:
+            return np.array([-6*x[1], -6*x[0]])
+        if i == 2:
+            return np.array([0,10*x[1]])
+        else:
+            return ValueError('Index out of range')
 
 class f2:
     def __call__(self, x):
@@ -35,8 +47,19 @@ class f2:
             return 200*(x[1]-(x[0])**2)
         else:
             raise ValueError('i must be 0 or 1')
+    #Aufteilen der Funktion für stochasticGradientDecent, direkt Bildung des Gradienten
+    def sgd_parts(self):
+        return 2
+    def sgd_derivative(self, x, i):
+        if i == 0:
+            return np.array([400*x[0]*(x[1]-(x[0])**2), 200*(x[1]-(x[0])**2)])
+        if i == 1:
+            return np.array([-2*(1-x[0])])
+        else:
+            return ValueError('Index out of range')
 
 #!!!can someone maybe check the partial derivatives?
+#!!!Did I understand sgd correctly?
         
 #%% optimisation
 #x0 = startvalue, a0 = initial stepwith, o = adaptive factor for a0, e = approx-closeness
@@ -54,7 +77,7 @@ def gradientDescent(f, x0, a0, o, e):
     fk = f_(xk)
     res = []
     res.append((xk,fk))
-    while np.linalg.norm(fk1 - fk) >= e:
+    while np.linalg.norm(fk1 - fk) >= e:#!!!Shouldn't it be > and not >= ?
         df = f_.derivative(xk)
         df = (1/np.linalg.norm(df)) * df
         while f_(xk - (ak * df)) >= fk:
@@ -83,8 +106,22 @@ def coordinateDescent(f, x0, a0, o, e):
         
     return xk1, f_(xk1)#!!!is it correct to return xk1?
 
-def stochasticGradientDescent(F,x0,a0,o,e):
-    return None
+def stochasticGradientDescent(f,x0,a0,o,e):
+    ak = a0
+    xk = x0
+    xk1 = np.inf
+    f_ = f()
+    fk1 = f_(xk1)
+    fk = f_(xk)
+    while np.linalg.norm(fk1 - fk) > e:
+        xk = xk1.copy
+        i = np.random.randint(f.sgd_parts)
+        pk = f.sgd_derivative(xk, i)
+        
+        while f_(xk - ak*pk/np.linalg.norm(pk)) > f_(xk):
+            ak = o*ak
+        xk1 = xk - ak*pk/np.linalg.norm(pk)
+    return xk1, f_(xk1)
 
 
         
