@@ -137,13 +137,15 @@ e = 1e-2
 - have arrows as previous version'''
 '''
 x0_0 = np.array([-5, -5])
-gd = gradientDescent(f1_, x0_0, a0, o, e)
+#gd = gradientDescent(f1_, x0_0, a0, o, e)
+gd = gradientDescent(f1, x0_0, a0, o, e)#should be f1, not f1_. Otherwise class can't be called correclty.
 pnt_x, pnt_y = [x0_0[0], gd[0][0]], [x0_0[1], gd[0][1]]
 pnt_z = np.array([f1_(p) for p in np.column_stack((pnt_x, pnt_y))]) # itteration over the column_stack and then applies the f1_(p) on it. p is a point in the given stack)
 ax.plot(pnt_x, pnt_y, pnt_z, 'b-o', linewidth=1, markersize=1)
 
 x0_1 = np.array([-3, 2])
-gd = gradientDescent(f1_, x0_1, a0, o, e)
+#gd = gradientDescent(f1_, x0_1, a0, o, e)
+gd = gradientDescent(f1, x0_1, a0, o, e)#The same thing here.
 pnt_x, pnt_y = [x0_1[0], gd[0][0]], [x0_1[1], gd[0][1]]
 pnt_z = np.array([f1_(p) for p in np.column_stack((pnt_x, pnt_y))]) # itteration over the column_stack and then applies the f1_(p) on it. p is a point in the given stack)
 ax.plot(pnt_x, pnt_y, pnt_z, 'y-o', linewidth=1, markersize=1)'''
