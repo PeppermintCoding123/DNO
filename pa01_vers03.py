@@ -15,12 +15,28 @@ class f1:
         return 5*(x[0]**2) - 6*x[0]*x[1] + 5*(x[1]**2)
     def derivative(self, x):
         return np.array([10*x[0] - 6*x[1], -6*x[0] + 10*x[1]])
+    def part_derivative(self, x, i):    #i = {0,1}
+        if i == 0:
+            return 10*x[0] - 6*x[1]
+        if i == 1:
+            return 10*x[1] - 6*x[0]
+        else:
+            raise ValueError('i must be 0 or 1')
 
 class f2:
     def __call__(self, x):
         return 100*(x[1]-x[0]^2)^2 +(1-x[0])^2
     def derivative(self, x):
         return np.array([2*(200*x[0]^3 - 200*x[0]*x[1] + x[0] -1), 200*(x[1]-x[0])^2])
+    def part_derivative(self, x, i):    #i = {0,1}
+        if i == 0:
+            return -400*x[0]*(x[1]-(x[0])**2) - 2*(1-x[0])
+        if i == 1:
+            return 200*(x[1]-(x[0])**2)
+        else:
+            raise ValueError('i must be 0 or 1')
+
+#!!!can someone maybe check the partial derivatives?
         
 #%% optimisation
 #x0 = startvalue, a0 = initial stepwith, o = adaptive factor for a0, e = approx-closeness
@@ -49,8 +65,23 @@ def gradientDescent(f, x0, a0, o, e):
         res.append((xk,fk))
     return np.array(res)
 
-def coordinateDescent(F,x0,a0,o,e):
-    return None
+def coordinateDescent(f, x0, a0, o, e):
+    ak = a0
+    xk = x0
+    xk1 = np.inf
+    f_ = f()
+    fk1 = f_(xk1)
+    fk = f_(xk)
+    while np.linalg.norm(fk1 - fk) >= e:
+        xk = xk1.copy#!!!is what I'm doing here correct?
+        i = np.random.randint(np.shape(x0)[0])
+        pk = f.part_derivative(xk, i)
+        
+        while f_(xk - ak*pk/np.linalg.norm(pk)) > f_(xk):
+            ak = o*ak
+        xk1 = xk - ak*pk/np.linalg.norm(pk)
+        
+    return xk1, f_(xk1)#!!!is it correct to return xk1?
 
 def stochasticGradientDescent(F,x0,a0,o,e):
     return None
