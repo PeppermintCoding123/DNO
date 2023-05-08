@@ -72,7 +72,7 @@ def coordinateDescent(f, x0, a0, o, e):
     f_ = f()
     fk1 = f_(xk1)
     fk = f_(xk)
-    while np.linalg.norm(fk1 - fk) >= e:
+    while np.linalg.norm(fk1 - fk) > e:
         xk = xk1.copy#!!!is what I'm doing here correct?
         i = np.random.randint(np.shape(x0)[0])
         pk = f.part_derivative(xk, i)
