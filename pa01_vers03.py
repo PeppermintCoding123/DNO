@@ -88,7 +88,29 @@ def gradientDescent(f, x0, a0, o, e):
         res.append(np.hstack((xk,fk)))
     return np.array(res)
 
-def coordinateDescent(f, x0, a0, o, e):#in progress Lisa
+def coordinateDescent(f, x0, a0, o, e):
+    ak = a0
+    xk = x0
+    fk1 = np.inf
+    f_ = f#initialisation
+    fk = f_(xk)
+    
+    res = []
+    res.append(np.hstack((xk,fk)))
+    while np.linalg.norm(fk1 - fk) > e:
+        i = np.random.randint(np.shape(x0)[0])
+        pk = f.part_derivative(xk, i)
+        
+        while f_((xk - ak*pk)/np.linalg.norm(pk)) > f_(xk):
+            ak = o*ak
+        xk = xk - ak*pk/np.linalg.norm(pk)
+        fk1 = np.copy(fk)
+        fk = f_(xk)
+        res.append(np.hstack((xk,fk)))
+        
+    return np.array(res)
+
+'''OLD: def coordinateDescent(f, x0, a0, o, e):#in progress Lisa
     ak = a0
     xk = x0
     xk1 = np.inf
@@ -106,7 +128,7 @@ def coordinateDescent(f, x0, a0, o, e):#in progress Lisa
         
     return xk1, f_(xk1)#!!!is it correct to return xk1?
     #Answer: Yes, but we want an array of xk for all 0 to k+1 and f(xk) from 0 to k+1, see gradientDescent
-
+'''
 def stochasticGradientDescent(f,x0,a0,o,e):
     ak = a0
     xk = x0
