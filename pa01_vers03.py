@@ -131,15 +131,15 @@ def stochasticGradientDescent(f,x0,a0,o,e):
 '''
 Given Information to remember:
     - (x,y) is in [-10,10]^2 - DONE
-    - implement optimisations(opt) for f1 with x0 = (-5,-5) and x0 = (-3,2)
-    - implement opt for f2 with x0 = (0,3) and x0 = (2,1)
-    - use quiver function to show the opt
-    - run opt until e <= 10^-2
+    - implement optimisations(opt) for f1 with x0 = (-5,-5) and x0 = (-3,2) - Done for gradient-Decent
+    - implement opt for f2 with x0 = (0,3) and x0 = (2,1) - TODO:Lisa
+    - use quiver function to show the opt -DONE
+    - run opt until e <= 10^-2 - DONE
     
     TODO whisches: 
-        -slider for o?
-        -better colourscheme
-        - turn the 3D Object automaticaly?
+        -slider for o? - NOT NESSACARY
+        -better colourscheme - Done
+        - turn the 3D Object automaticaly? - NOT NESSACARY
       
     quiver: Alle Startpunkte von Pfeilen, Richtungen von Pfeilen übergeben --> plottet Pfeil von aktueller iterierter zu nächster
 '''
@@ -149,59 +149,58 @@ x_values = np.linspace(-10, 10, 100)
 y_values = np.linspace(-10, 10, 100)
 x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-# Calculate z according to x- & y-Values
-f1_ = f1()
-z_grid = np.array([[f1_(np.array([x, y])) for x in x_values] for y in y_values])
+# Define the starting points and functions
+starting_points_map = {
+    f1(): [np.array([-5, -5]), np.array([-3, 2])] 
+    #,  f2(): [np.array([0, 3]), np.array([2, 1])]
+    #TODO: LISA: this line is commented out, because gradientDecent dont work on it jet. Debugging later tonight.
+}
 
-# Drwa 3D-Surface
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-surf = ax.plot_surface(x_grid, y_grid, z_grid, cmap=cm.PuBu, alpha=0.8)
+# Loop through the functions and their corresponding starting points
+for func, starting_points in starting_points_map.items():
+    for x0 in starting_points:
+        
+        # Calculate z according to x- & y-Values
+        f_ = func
+        z_grid = np.array([[f_(np.array([x, y])) for x in x_values] for y in y_values])
 
-# Gradient Descent
-a0 = 1
-'''
-o = float(input("Wählen Sie sigma zwischen 0 und 1."))
-if o >= 1:
-    raise ValueError('sigma ist zu groß')
-if o < 0:
-    raise ValueError('sigma muss positiv sein')
-'''
-o = 0.5 #Wir setzen o hier 0.5, wenn das Programm funktioniert, erfolgt die Wahl von o durch Eingabe eines Wertes. (Diese Zeile wird gelöscht und dafür der obere Block genommen.)
-e = 1e-2
+        # Drwa 3D-Surface
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111, projection='3d')
+        surf = ax1.plot_surface(x_grid, y_grid, z_grid, cmap=cm.YlOrRd, alpha=0.8)
 
-'''TODO: LISA(probably): 
-- implement loops for multiple x & multiple f
-- implement 
-'''
-x0 = np.array([-5, -5])
-gd = gradientDescent(f1_, x0, a0, o, e)
-drc = np.diff(gd, axis=0) # calculated the directiojn between points
+        fig.colorbar(surf, shrink=0.5, aspect=5)
+        # Gradient Descent
+        a0 = 1
+        o = 0.5
+        e = 1e-2
 
-ax1.quiver(gd[:-1, 0], gd[:-1, 1], gd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='lightcoral')#x ist the first two coordinates, f(x) should be the third one. The arrowshould point in the direction orthogonal to the 
+        gd = gradientDescent(f_, x0, a0, o, e)
+        drc = np.diff(gd, axis=0) # calculated the directiojn between points
 
-# Labels
-plt.title('Figure f1 with point x0 = [-5,-5] in 3D' )
-ax1.set_xlabel('X-Achse')
-ax1.set_ylabel('Y-Achse')
-ax1.set_zlabel('Z-Achse')
+        ax1.quiver(gd[:-1, 0], gd[:-1, 1], gd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='lightcoral')#x ist the first two coordinates, f(x) should be the third one. The arrowshould point in the direction orthogonal to the 
 
-plt.show()
+        # Labels
+        plt.title(f'Figure {func.__class__.__name__} with point x0 = {x0} in 3D' )
+        ax1.set_xlabel('X-Achse')
+        ax1.set_ylabel('Y-Achse')
+        ax1.set_zlabel('Z-Achse')
+
+        plt.show()
 
 
-# Create a new figure and axis for the 2D plot
-fig2, ax2 = plt.subplots()
-contour = ax2.contourf(x_grid, y_grid, z_grid, cmap=cm.YlOrRd, levels=20)
-fig2.colorbar(contour)
+        # Create a new figure and axis for the 2D plot
+        fig2, ax2 = plt.subplots()
+        contour = ax2.contourf(x_grid, y_grid, z_grid, cmap=cm.YlOrRd, levels=20)
+        fig2.colorbar(contour)
 
-# Add quiver arrows to the 2D plot
-ax2.quiver(gd[:-1, 0], gd[:-1, 1], drc[:, 0], drc[:, 1], color='lightcoral', angles='xy', scale_units='xy', scale=1)
+        # Add quiver arrows to the 2D plot
+        ax2.quiver(gd[:-1, 0], gd[:-1, 1], drc[:, 0], drc[:, 1], color='lightcoral', angles='xy', scale_units='xy', scale=1)
 
-plt.title('Figure f1 with point x0 = [-5,-5] in 2D' )
-ax2.set_xlabel('X-Achse')
-ax2.set_ylabel('Y-Achse')
+        plt.title(f'Figure {func.__class__.__name__} with point x0 = {x0} in 2D' )
+        ax2.set_xlabel('X-Achse')
+        ax2.set_ylabel('Y-Achse')
 
-# Display the 2D plot
-plt.show()
-
+        # Display the 2D plot
+        plt.show()
 
