@@ -174,12 +174,22 @@ for func, starting_points in starting_points_map.items():
         a0 = 1
         o = 0.5
         e = 1e-2
-
+        
+'''TODO: Merschweinchen: Implement the next 3 lines for the other two functions '''
         gd = gradientDescent(f_, x0, a0, o, e)
         drc = np.diff(gd, axis=0) # calculated the directiojn between points
-
         ax1.quiver(gd[:-1, 0], gd[:-1, 1], gd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='lightcoral')#x ist the first two coordinates, f(x) should be the third one. The arrowshould point in the direction orthogonal to the 
-
+        
+        '''TODO: Merschweinchen: Probbably like this:
+        cd = coordinateDescent(f, x0, a0, o, e)
+        drc = np.diff(cd, axis=0) # calculated the directiojn between points
+        ax1.quiver(cd[:-1, 0], cd[:-1, 1], cd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='crimson')
+        
+        sd = stochasticGradientDescent(f,x0,a0,o,e)
+        drc = np.diff(sd, axis=0) # calculated the directiojn between points
+        ax1.quiver(sd[:-1, 0], sd[:-1, 1], sd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='deeppink')
+        '''
+        
         # Labels
         plt.title(f'Figure {func.__class__.__name__} with point x0 = {x0} in 3D' )
         ax1.set_xlabel('X-Achse')
@@ -196,7 +206,12 @@ for func, starting_points in starting_points_map.items():
 
         # Add quiver arrows to the 2D plot
         ax2.quiver(gd[:-1, 0], gd[:-1, 1], drc[:, 0], drc[:, 1], color='lightcoral', angles='xy', scale_units='xy', scale=1)
-
+        '''TODO: Merschweinchen: the rest
+        ax2.quiver(cd[:-1, 0], cd[:-1, 1], cd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='crimson', angles='xy', scale_units='xy', scale=1)
+        ax1.quiver(sd[:-1, 0], sd[:-1, 1], sd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='deeppink', angles='xy', scale_units='xy', scale=1)
+        '''
+        
+        
         plt.title(f'Figure {func.__class__.__name__} with point x0 = {x0} in 2D' )
         ax2.set_xlabel('X-Achse')
         ax2.set_ylabel('Y-Achse')
