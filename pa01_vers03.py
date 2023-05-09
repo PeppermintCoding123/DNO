@@ -100,13 +100,17 @@ def coordinateDescent(f, x0, a0, o, e):
     while np.linalg.norm(fk1 - fk) > e:
         i = np.random.randint(np.shape(x0)[0])
         pk = f.part_derivative(xk, i)
+        norm_pk = np.linalg.norm(pk)
         
-        while f_((xk - ak*pk)/np.linalg.norm(pk)) > f_(xk):
-            ak = o*ak
-        xk = xk - ak*pk/np.linalg.norm(pk)
-        fk1 = np.copy(fk)
-        fk = f_(xk)
-        res.append(np.hstack((xk,fk)))
+        if norm_pk > 0:
+            while (f_((xk - ak*pk)/norm_pk) > f_(xk)):
+                ak = o*ak
+            xk = xk - ak*norm_pk
+            fk1 = np.copy(fk)
+            fk = f_(xk)
+            res.append(np.hstack((xk,fk)))
+        else:
+            break
         
     return np.array(res)
 
