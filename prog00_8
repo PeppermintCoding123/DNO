@@ -114,7 +114,11 @@ def coordinateDescent(f, x0, a0, o, e):
     res.append(np.hstack((xk,fk)))
     while np.linalg.norm(fk1 - fk) > e:
         i = np.random.randint(np.shape(x0)[0])
-        pk = f.part_derivative(xk, i)
+        if i == 0:
+            ev = np.array([1,0])
+        if i == 1:
+            ev = np.array([0,1])
+        pk = f.part_derivative(xk, i)*ev
         norm_pk = np.linalg.norm(pk)
         
         if norm_pk > 0:
