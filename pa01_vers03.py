@@ -105,6 +105,7 @@ def coordinateDescent(f, x0, a0, o, e):
         xk1 = xk - ak*pk/np.linalg.norm(pk)
         
     return xk1, f_(xk1)#!!!is it correct to return xk1?
+    #Answer: Yes, but we want an array of xk for all 0 to k+1 and f(xk) from 0 to k+1, see gradientDescent
 
 def stochasticGradientDescent(f,x0,a0,o,e):
     ak = a0
