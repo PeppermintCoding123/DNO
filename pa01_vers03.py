@@ -105,7 +105,7 @@ def coordinateDescent(f, x0, a0, o, e):
         if norm_pk > 0:
             while (f_((xk - ak*pk)/norm_pk) > f_(xk)):
                 ak = o*ak
-            xk = xk - ak*norm_pk
+            xk = xk - ak*pk/norm_pk
             fk1 = np.copy(fk)
             fk = f_(xk)
             res.append(np.hstack((xk,fk)))
