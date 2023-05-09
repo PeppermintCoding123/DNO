@@ -37,9 +37,9 @@ class f1:
 
 class f2:
     def __call__(self, x):
-        return 100*(x[1]-x[0]^2)^2 +(1-x[0])^2
+        return 100*(x[1]-x[0]**2)**2 +(1-x[0])**2
     def derivative(self, x):
-        return np.array([2*(200*x[0]^3 - 200*x[0]*x[1] + x[0] -1), 200*(x[1]-x[0])^2])
+        return np.array([2*(200*x[0]**3 - 200*x[0]*x[1] + x[0] -1), 200*(x[1]-x[0])**2])
     def part_derivative(self, x, i):    #i = {0,1}
         if i == 0:
             return -400*x[0]*(x[1]-(x[0])**2) - 2*(1-x[0])
@@ -169,32 +169,39 @@ if o < 0:
 '''
 o = 0.5 #Wir setzen o hier 0.5, wenn das Programm funktioniert, erfolgt die Wahl von o durch Eingabe eines Wertes. (Diese Zeile wird gelöscht und dafür der obere Block genommen.)
 e = 1e-2
-'''TODO:
-- Lisa:
-- use quiver function of numpy
-- have arrows as previous version'''
-'''
-x0_0 = np.array([-5, -5])
-#gd = gradientDescent(f1_, x0_0, a0, o, e)
-gd = gradientDescent(f1, x0_0, a0, o, e)#should be f1, not f1_. Otherwise class can't be called correclty.
-pnt_x, pnt_y = [x0_0[0], gd[0][0]], [x0_0[1], gd[0][1]]
-pnt_z = np.array([f1_(p) for p in np.column_stack((pnt_x, pnt_y))]) # itteration over the column_stack and then applies the f1_(p) on it. p is a point in the given stack)
-ax.plot(pnt_x, pnt_y, pnt_z, 'b-o', linewidth=1, markersize=1)
 
-x0_1 = np.array([-3, 2])
-#gd = gradientDescent(f1_, x0_1, a0, o, e)
-gd = gradientDescent(f1, x0_1, a0, o, e)#The same thing here.
-pnt_x, pnt_y = [x0_1[0], gd[0][0]], [x0_1[1], gd[0][1]]
-pnt_z = np.array([f1_(p) for p in np.column_stack((pnt_x, pnt_y))]) # itteration over the column_stack and then applies the f1_(p) on it. p is a point in the given stack)
-ax.plot(pnt_x, pnt_y, pnt_z, 'y-o', linewidth=1, markersize=1)'''
+'''TODO: LISA(probably): 
+- implement loops for multiple x & multiple f
+- implement 
+'''
+x0 = np.array([-5, -5])
+gd = gradientDescent(f1_, x0, a0, o, e)
+drc = np.diff(gd, axis=0) # calculated the directiojn between points
+
+ax1.quiver(gd[:-1, 0], gd[:-1, 1], gd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='lightcoral')#x ist the first two coordinates, f(x) should be the third one. The arrowshould point in the direction orthogonal to the 
 
 # Labels
-ax.set_xlabel('X-Achse')
-ax.set_ylabel('Y-Achse')
-ax.set_zlabel('Z-Achse')
+plt.title('Figure f1 with point x0 = [-5,-5] in 3D' )
+ax1.set_xlabel('X-Achse')
+ax1.set_ylabel('Y-Achse')
+ax1.set_zlabel('Z-Achse')
 
-fig.colorbar(surf, shrink=0.5, aspect=5)
+plt.show()
 
+
+# Create a new figure and axis for the 2D plot
+fig2, ax2 = plt.subplots()
+contour = ax2.contourf(x_grid, y_grid, z_grid, cmap=cm.YlOrRd, levels=20)
+fig2.colorbar(contour)
+
+# Add quiver arrows to the 2D plot
+ax2.quiver(gd[:-1, 0], gd[:-1, 1], drc[:, 0], drc[:, 1], color='lightcoral', angles='xy', scale_units='xy', scale=1)
+
+plt.title('Figure f1 with point x0 = [-5,-5] in 2D' )
+ax2.set_xlabel('X-Achse')
+ax2.set_ylabel('Y-Achse')
+
+# Display the 2D plot
 plt.show()
 
 
