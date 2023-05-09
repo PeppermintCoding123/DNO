@@ -129,22 +129,28 @@ def coordinateDescent(f, x0, a0, o, e):
     return xk1, f_(xk1)#!!!is it correct to return xk1?
     #Answer: Yes, but we want an array of xk for all 0 to k+1 and f(xk) from 0 to k+1, see gradientDescent
 '''
-def stochasticGradientDescent(f,x0,a0,o,e):
+def stochasticGradientDescent(f ,x0 ,a0 ,o ,e):
     ak = a0
     xk = x0
     xk1 = np.inf
-    f_ = f()
+    f_ = f
     fk1 = f_(xk1)
     fk = f_(xk)
+    
+    res = []
+    res.append(np.hstack((xk,fk)))
     while np.linalg.norm(fk1 - fk) > e:
-        xk = xk1.copy
         i = np.random.randint(f.sgd_parts)
         pk = f.sgd_derivative(xk, i)
         
         while f_(xk - ak*pk/np.linalg.norm(pk)) > f_(xk):
             ak = o*ak
-        xk1 = xk - ak*pk/np.linalg.norm(pk)
-    return xk1, f_(xk1)
+        xk = xk - ak*pk/np.linalg.norm(pk)
+        fk1 = np.copy(fk)
+        fk = f_(xk)
+        res.append(np.hstack((xk,fk)))
+    
+    return np.array(res)
 
 
         
