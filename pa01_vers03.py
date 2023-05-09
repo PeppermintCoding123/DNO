@@ -170,6 +170,7 @@ Given Information to remember:
       
     quiver: Alle Startpunkte von Pfeilen, Richtungen von Pfeilen übergeben --> plottet Pfeil von aktueller iterierter zu nächster
 '''
+plt.close('all')    #I would set this at the beginning of visualisation, not a must, but...
 
 # construct x- & y-Values
 x_values = np.linspace(-10, 10, 100)
