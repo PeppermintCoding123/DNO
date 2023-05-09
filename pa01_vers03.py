@@ -88,7 +88,7 @@ def gradientDescent(f, x0, a0, o, e):
         res.append(np.hstack((xk,fk)))
     return np.array(res)
 
-def coordinateDescent(f, x0, a0, o, e):
+def coordinateDescent(f, x0, a0, o, e):#in progress Lisa
     ak = a0
     xk = x0
     xk1 = np.inf
