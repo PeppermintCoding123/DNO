@@ -73,11 +73,11 @@ def gradientDescent(f, x0, a0, o, e):
     ak = a0
     xk = x0
     fk1 = np.inf
-    f_ = f()
+    f_ = f
     fk = f_(xk)
     res = []
-    res.append((xk,fk))
-    while np.linalg.norm(fk1 - fk) >= e:#!!!Shouldn't it be > and not >= ?
+    res.append(np.hstack((xk,fk)))
+    while np.linalg.norm(fk1 - fk) >= e:
         df = f_.derivative(xk)
         df = (1/np.linalg.norm(df)) * df
         while f_(xk - (ak * df)) >= fk:
@@ -85,7 +85,7 @@ def gradientDescent(f, x0, a0, o, e):
         xk = xk - ak * df
         fk1 = np.copy(fk)
         fk = f_(xk)
-        res.append((xk,fk))
+        res.append(np.hstack((xk,fk)))
     return np.array(res)
 
 def coordinateDescent(f, x0, a0, o, e):
