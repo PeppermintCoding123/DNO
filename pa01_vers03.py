@@ -132,15 +132,14 @@ def coordinateDescent(f, x0, a0, o, e):
 def stochasticGradientDescent(f ,x0 ,a0 ,o ,e):
     ak = a0
     xk = x0
-    xk1 = np.inf
+    fk1 = np.inf
     f_ = f
-    fk1 = f_(xk1)
     fk = f_(xk)
     
     res = []
     res.append(np.hstack((xk,fk)))
     while np.linalg.norm(fk1 - fk) > e:
-        i = np.random.randint(f.sgd_parts)
+        i = np.random.randint(f.sgd_parts())
         pk = f.sgd_derivative(xk, i)
         
         while f_(xk - ak*pk/np.linalg.norm(pk)) > f_(xk):
@@ -209,6 +208,8 @@ for func, starting_points in starting_points_map.items():
         ax1.quiver(gd[:-1, 0], gd[:-1, 1], gd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='lightcoral')#x ist the first two coordinates, f(x) should be the third one. The arrowshould point in the direction orthogonal to the 
         
         '''TODO: Merschweinchen: Probbably like this:
+        !!!the version below should work (not really, but better than this)
+        
         cd = coordinateDescent(f, x0, a0, o, e)
         drc = np.diff(cd, axis=0) # calculated the directiojn between points
         ax1.quiver(cd[:-1, 0], cd[:-1, 1], cd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='crimson')
@@ -217,6 +218,13 @@ for func, starting_points in starting_points_map.items():
         drc = np.diff(sd, axis=0) # calculated the directiojn between points
         ax1.quiver(sd[:-1, 0], sd[:-1, 1], sd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='deeppink')
         '''
+        cd = coordinateDescent(f_, x0, a0, o, e)
+        drc2 = np.diff(cd, axis=0) # calculated the directiojn between points
+        ax1.quiver(cd[:-1, 0], cd[:-1, 1], cd[:-1, 2], drc2[:, 0], drc2[:, 1], drc2[:, 2], color='crimson')
+        
+        sd = stochasticGradientDescent(f_,x0,a0,o,e)
+        drc3 = np.diff(sd, axis=0) # calculated the directiojn between points
+        ax1.quiver(sd[:-1, 0], sd[:-1, 1], sd[:-1, 2], drc3[:, 0], drc3[:, 1], drc3[:, 2], color='deeppink')
         
         # Labels
         plt.title(f'Figure {func.__class__.__name__} with point x0 = {x0} in 3D' )
@@ -235,8 +243,9 @@ for func, starting_points in starting_points_map.items():
         # Add quiver arrows to the 2D plot
         ax2.quiver(gd[:-1, 0], gd[:-1, 1], drc[:, 0], drc[:, 1], color='lightcoral', angles='xy', scale_units='xy', scale=1)
         '''TODO: Merschweinchen: the rest
-        ax2.quiver(cd[:-1, 0], cd[:-1, 1], cd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='crimson', angles='xy', scale_units='xy', scale=1)
-        ax1.quiver(sd[:-1, 0], sd[:-1, 1], sd[:-1, 2], drc[:, 0], drc[:, 1], drc[:, 2], color='deeppink', angles='xy', scale_units='xy', scale=1)
+        ax2.quiver(cd[:-1, 0], cd[:-1, 1], cd[:-1, 2], drc2[:, 0], drc2[:, 1], drc2[:, 2], color='crimson', angles='xy', scale_units='xy', scale=1)
+        ax1.quiver(sd[:-1, 0], sd[:-1, 1], sd[:-1, 2], drc3[:, 0], drc3[:, 1], drc3[:, 2], color='deeppink', angles='xy', scale_units='xy', scale=1)
+        This doesn't work, it seems their are to many arguments given to quiver. I#m not really sure how quiver works, I'll look into it.
         '''
         
         
