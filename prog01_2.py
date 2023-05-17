@@ -22,39 +22,26 @@ def BFGS(x0, H0, a0, o, e):
         xk+1 = xk - Hk * f1_derivative
     """
     # initialize iterations
-    ak = a0
     xk = x0
     Hk = H0
-    xk_plus1 = xk + ak*(-Hk)*f_derivative(xk)
+    fk = f(xk)
+    fk_plus1 = np.inf
+    '''xk_plus1 = xk + ak*(-Hk)*f_derivative(xk)
     fk = f(xk) # fk is always the f of the prefious xk
     fk_plus1 = f(xk_plus1) # the f call on the current xk
-    
+    '''
     res = []
     res.append(np.hstack((xk,fk)))
-    res.append(np.hstack((xk_plus1,fk_plus1)))
-    
+    '''res.append(np.hstack((xk_plus1,fk_plus1)))
+    '''
     while np.linalg.norm(fk_plus1 - fk) > e:
         ak = a0
-        # calculate Hk+1
-        sk = xk_plus1 - xk
-        yk = f_derivative(xk_plus1) - f_derivative(xk)
-        rohk = 1/(np.dot(yk,sk))
-        
-        rys = rohk * yk * sk.T
-        rsy = rohk * sk * yk.T
-        Hk_plus1 = Hk - (Hk * rys) - (rsy * Hk) + (rsy * Hk * rys) + (rohk * sk * sk.T)
-        
+        fk = f(xk)
         # adjust ak to take step
-        '''
-        delta_xk = ak*Hk_plus1
-        while (f(xk - delta_xk) - fk) > e: # --- Use norm here ?
-            ak *= o
-            delta_xk =  ak*Hk_plus1
-        '''
         dfk = f_derivative(xk)
         
-        xk = xk_plus1
-        fk = fk_plus1
+        #xk = xk_plus1
+        #fk = fk_plus1
         xk_plus1 = xk + ak*(-Hk)*dfk
         fk_plus1 = f(xk_plus1)
         
@@ -62,9 +49,21 @@ def BFGS(x0, H0, a0, o, e):
                 ak *= o
                 xk_plus1 = xk + ak*(-Hk)*dfk
                 fk_plus1 = f(xk_plus1)
-        
+                
         res.append(np.hstack((xk_plus1,fk_plus1)))
-
+        
+        # calculate Hk+1
+        sk = xk_plus1 - xk
+        yk = f_derivative(xk_plus1) - f_derivative(xk)
+        rohk = 1/(np.dot(yk,sk))
+        
+        rys = rohk * yk * sk.T
+        rsy = rohk * sk * yk.T
+        Hk = Hk - (Hk * rys) - (rsy * Hk) + (rsy * Hk * rys) + (rohk * sk * sk.T)
+        
+        # move for next iteration
+        xk = np.copy(xk_plus1)
+        
     return np.array(res)
     
     
@@ -78,7 +77,7 @@ def BFGS(x0, H0, a0, o, e):
         - in 'Konturenplot' 
         - presision: e-6
     Kommandozeile: 
-        - number of iterations = print(res.T[0].size)
+        - number of iterations = print(res.T[0].size - 1)
         - x_sternchen (letztes xk_plus1)'''
 
     
