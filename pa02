@@ -102,11 +102,6 @@ surf = ax1.plot_surface(x_grid, y_grid, z_grid, cmap=cm.YlOrRd, alpha=0.8)
 
 fig.colorbar(surf, shrink=0.5, aspect=5)
         
-#BFGS
-cgNL_points = conjugateGradientNL(x0, a0, o, e)
-drc = np.diff(cgNL_points, axis=0)
-ax1.quiver(cgNL_points[:-1,0], cgNL_points[:-1,1], cgNL_points[:-1,2], drc[:,0], drc[:,1], drc[:,2], length = 3, color='blue', label='cgNL')          
-                
 # Labels
 plt.title(f'Figure conjugateGradientNL with point x0 = {x0} in 3D' )
 ax1.set_xlabel('X-Achse')
@@ -116,6 +111,25 @@ ax1.set_zlabel('Z-Achse')
 ax1.legend()
         
 plt.show()
+
+# Draw 2D-Surface
+fig2, ax2 = plt.subplots()
+contour = ax2.contourf(x_grid, y_grid, z_grid, cmap=cm.YlOrRd, levels=20)
+fig2.colorbar(contour)
+
+# quiver
+cgNL_points = conjugateGradientNL(x0, a0, o, e)
+drc = np.diff(cgNL_points, axis=0)
+ax2.quiver(cgNL_points[:-1,0], cgNL_points[:-1,1], drc[:,0], drc[:,1], color='blue', label='cgNL')
+
+# Labels
+plt.title(f'Figure conjugateGradientNL with point x0 = {x0} in 2D')
+ax2.set_xlabel('X-Achse')
+ax2.set_ylabel('Y-Achse')
+
+ax2.legend()
+
+plt.show
 
 def it_steps(cgNL_points):
     return cgNL_points.T[0].size - 1
