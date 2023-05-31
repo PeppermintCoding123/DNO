@@ -67,7 +67,8 @@ def conjugateGradientNL(x0, a0, o, e):
         xk = xk_plus1
         res.append(np.hstack((xk,f(xk))))
         
-        return res
+        return np.array(res)
+        
 #%% Test for conjugateGradient
 A = np.array([[3, 2], [2, 6]])
 b = np.array([2, -8])
@@ -104,7 +105,7 @@ fig.colorbar(surf, shrink=0.5, aspect=5)
 #BFGS
 cgNL_points = conjugateGradientNL(x0, a0, o, e)
 drc = np.diff(cgNL_points, axis=0)
-ax1.quiver(cgNL_points[1, 0], cgNL_points[1, 1], cgNL_points[1, 2], drc[0], drc[1], drc[2], color='blue', label='BFGS')     
+ax1.quiver(cgNL_points[:-1,0], cgNL_points[:-1,1], cgNL_points[:-1,2], drc[:,0], drc[:,1], drc[:,2], length = 3, color='blue', label='cgNL')          
                 
 # Labels
 plt.title(f'Figure conjugateGradientNL with point x0 = {x0} in 3D' )
@@ -116,8 +117,8 @@ ax1.legend()
         
 plt.show()
 
-def it_steps(bfgs_points):
-    return bfgs_points.T[0].size
+def it_steps(cgNL_points):
+    return cgNL_points.T[0].size - 1
 print('Total number of iterations to reach |xk - x*| < ' + str(e) + ' is: ' + str(it_steps(cgNL_points)))
 print('x* = ' + str(cgNL_points[-1]))
 
