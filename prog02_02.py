@@ -36,7 +36,7 @@ def conjugateGradient(A, b, x0):
             dk = rk_plus1 + bk_plus1 * dk
             rk = rk_plus1
     
-    return res
+    return 'conjugateGradient: x* = ' + str(res[-1])
 
 def conjugateGradientNL(x0, a0, o, e):
     # initialise step
@@ -53,11 +53,12 @@ def conjugateGradientNL(x0, a0, o, e):
     res.append(np.hstack((xk,f(xk))))
     
     for k in range(n):
+        ak = a0
         # calculate step
         xk_plus1 = xk + ak * dk
         
         # Armijo Goldstein
-        Ek = ak * np.inner(-dk, dk) #!!!Is this right for pk (dk)?
+        Ek = ak * np.inner(-dk, dk)
         Dk = f(xk_plus1) - f(xk)
         while not c1*Ek > Dk > c2*Ek:
             ak = o * ak
@@ -83,8 +84,6 @@ b = np.array([2, -8])
 x0 = np.array([-2, 2])
 
 print(conjugateGradient(A, b, x0))
-print('x* = ' + str(conjugateGradient(A, b, x0)[-1]))
-
 
 #%% visualisation: 
 plt.close('all')
@@ -133,13 +132,4 @@ ax2.legend()
 
 plt.show()
 
-print('x* in cgNL = ' + str(cgNL_points[-1]))
-
-#%%
-"""
-    TODO:
-        - Use Armijo-Goldstein instead of o for conjugateGradientNL
-        - Fis visualisation
-        - Implement the  print(conjugateGradient(A, b, x0)) better
-        """
-
+print('x* in cgNL = ' + str(cgNL_points[-1][:-1]))  #!!!Necessary?
