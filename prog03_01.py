@@ -18,7 +18,7 @@ def f_explicite(aufgabe, u):
         delta_u_up = np.sqt(u[1])
         delta_u_down = -2 * u[0] * delta_u_up
         delta_u = np.array([[delta_u_up],[delta_u_down]])
-        pass
+        return delta_u
     raise ValueError('unknown aufgabe given')
 
 # %%
