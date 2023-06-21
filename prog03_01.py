@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 
 #%%
-# f is the function of delta u. u1 and u2 should be called at position t and then handed over. Thus far, just the explisite Implementation.
-def f_explicite(aufgabe, t, u):    
+# f is the function of delta u. u should be called at position tk and then handed over. Thus far, just the explisite Implementation.
+def f_explicite(aufgabe, u):    
     if aufgabe == 'a':
         A = np.array([0, 1], [-1, 0])
         delta_u = A * u
