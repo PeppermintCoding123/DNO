@@ -21,6 +21,24 @@ def f_explicite(aufgabe, u):
         return delta_u
     raise ValueError('unknown aufgabe given')
 
+def f_implicite(aufgabe, tau):
+    # this should be multiplied to u(tk), not added as in the explicit case
+    # TODO: actually calculate by hand and check if my calculations are correct...
+    if aufgabe == 'a':
+        A = np.array([1, tau], [-tau, 1])
+        A = 1/(1 + tau**2) * A
+        return A
+    if aufgabe == 'b':
+        # TODO:
+        A = np.array([2 * (tau + 1), -2 * tau],[2 * tau, 2 - tau])
+        factor = 1/(tau**2 + tau + 2)
+        A = factor * A
+        return A
+    if aufgabe == 'c':
+        # TODO: not jet finished with calculations
+        pass
+        
+    raise ValueError('unknown aufgabe given')
 # %%
 # u0 ist anfangswert, tau ist schrittweite, anzahl Schritte, F ist u'(t)
 def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
@@ -37,7 +55,21 @@ def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
         res.append(u_tk)
         
     return res
+
+def impliciteEuler(u0, tau, nbr_Steps, aufgabe):
+    res = []
+    u_tk = u0
+    res.append(u_tk) # Step for tau = 0
+    
+    factor = f_implicite(aufgabe, tau)
+    
+    for t in range(tau, tau * nbr_Steps, tau):
+        u_tkPlut1 = u_tk * factor
         
+        u_tk = u_tkPlut1
+        res.append(u_tk)
+        
+    return res
 #%% 
 ''' TODO: Implement Implicite 
     - probably implement a function like f_explicite and do the strange turn-around calculations there
