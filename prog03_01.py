@@ -3,78 +3,69 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 
 #%%
-# f is the function of delta u. u should be called at position tk and then handed over. Thus far, just the explisite Implementation.
-def f_explicite(aufgabe, u):    
-    if aufgabe == 'a':
+class F_a:
+    def __call__(u): 
         A = np.array([0, 1], [-1, 0])
         delta_u = A * u
         return delta_u
-    if aufgabe == 'b':
+
+    def derivative():
+        A = np.array([0, 1], [-1, 0])
+        return A
+    
+class F_b:
+    def __call__(u):
         A = np.array([0.5, -1],[1, -1])
         delta_u = A * u
         return delta_u
-    if aufgabe == 'c':
-        # is it nessasary to do errorhandeling for the case that u2 is smaller than 
+
+    def derivative():
+        A = np.array([0.5, -1],[1, -1])
+        return A
+
+class F_c(u):
+    def __call__(u):
         delta_u_up = np.sqt(u[1])
         delta_u_down = -2 * u[0] * delta_u_up
         delta_u = np.array([[delta_u_up],[delta_u_down]])
         return delta_u
-    raise ValueError('unknown aufgabe given')
-
-def f_implicite(aufgabe, tau):
-    # this should be multiplied to u(tk), not added as in the explicit case
-    # TODO: actually calculate by hand and check if my calculations are correct...
-    if aufgabe == 'a':
-        A = np.array([1, tau], [-tau, 1])
-        A = 1/(1 + tau**2) * A
-        return A
-    if aufgabe == 'b':
-        # TODO:
-        A = np.array([2 * (tau + 1), -2 * tau],[2 * tau, 2 - tau])
-        factor = 1/(tau**2 + tau + 2)
-        A = factor * A
-        return A
-    if aufgabe == 'c':
-        # TODO: not jet finished with calculations
+    
+    def derivative():
+        #TODO: is stil in calculation
         pass
-        
-    raise ValueError('unknown aufgabe given')
+
+def newton(F, x0):
+    F_ = F
+    xk = x0
+    for i in range (10):
+        if xk != 0:
+            xk1 = xk - 1/F_.derivative() * F_.__call__(xk)
+            xk = xk1
+        else:
+            break
+    return xk
 # %%
 # u0 ist anfangswert, tau ist schrittweite, anzahl Schritte, F ist u'(t)
-def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
+def explisiteEuler(u0, tau, nbr_Steps, F):
     res = []
     u_tk = u0
-    if aufgabe == 'a' or aufgabe == 'b':
-        res.append(u_tk) # Step for tau = 0
+    F_ = F
     
-        for t in range(tau, tau * nbr_Steps, tau):
-            F_tk = f_explicite(aufgabe, t, u_tk)
-            F_tk *= tau
-            u_tkPlut1 = u_tk + F_tk
-        
-            u_tk = u_tkPlut1
-            res.append(u_tk)
-        
-        return res
-    elif aufgabe == 'c':
-        pass
-    else:
-        raise ValueError('aufgabe is unknown')
-
-def impliciteEuler(u0, tau, nbr_Steps, aufgabe):
-    res = []
-    u_tk = u0
     res.append(u_tk) # Step for tau = 0
     
-    factor = f_implicite(aufgabe, tau)
-    
     for t in range(tau, tau * nbr_Steps, tau):
-        u_tkPlut1 = u_tk * factor
-        
+        F_tk = F_.__call__(u_tk)
+        F_tk *= tau
+        u_tkPlut1 = u_tk + F_tk
         u_tk = u_tkPlut1
         res.append(u_tk)
-        
+          
     return res
+        
+#%%
+def impliciteEuler(u0, tau, nbr_Steps, F):
+    # TODO: do as newton
+    pass
 #%% 
 ''' TODO: Implement Implicite 
     - probably implement a function like f_explicite and do the strange turn-around calculations there
