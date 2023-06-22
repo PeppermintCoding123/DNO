@@ -5,7 +5,7 @@ import numpy as np
 
 x = []
 y = []
-res = drc
+res = !!!Matrix we get from the functions.
 
 figure, ax = plt.subplots()
 
