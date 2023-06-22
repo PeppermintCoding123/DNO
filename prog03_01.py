@@ -44,17 +44,22 @@ def f_implicite(aufgabe, tau):
 def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
     res = []
     u_tk = u0
-    res.append(u_tk) # Step for tau = 0
+    if aufgabe == 'a' or aufgabe == 'b':
+        res.append(u_tk) # Step for tau = 0
     
-    for t in range(tau, tau * nbr_Steps, tau):
-        F_tk = f_explicite(aufgabe, t, u_tk)
-        F_tk *= tau
-        u_tkPlut1 = u_tk + F_tk
+        for t in range(tau, tau * nbr_Steps, tau):
+            F_tk = f_explicite(aufgabe, t, u_tk)
+            F_tk *= tau
+            u_tkPlut1 = u_tk + F_tk
         
-        u_tk = u_tkPlut1
-        res.append(u_tk)
+            u_tk = u_tkPlut1
+            res.append(u_tk)
         
-    return res
+        return res
+    elif aufgabe == 'c':
+        pass
+    else:
+        raise ValueError('aufgabe is unknown')
 
 def impliciteEuler(u0, tau, nbr_Steps, aufgabe):
     res = []
