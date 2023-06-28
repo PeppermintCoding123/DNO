@@ -82,6 +82,21 @@ if chosen_aufgabe != 'a':
             chosen_aufgabe = str(input('Wählen Sie zwischen den Anfangswertproblemen a), b) und c).'))
 '''
 chosen_aufgabe = 'a'
+
+#%% implementation of analytic solution
+
+def analytic_solution(aufgabe):
+    if aufgabe == 'a':
+        res = []
+        for i in range(nbr_Steps+1):
+            res.append(np.array([np.sin(i), np.cos(i)]))
+        return np.array(res)
+    if aufgabe == 'b':
+        pass
+    if aufgabe == 'c':
+        pass
+
+
 #%% visualisation: 
 plt.close('all')
 
