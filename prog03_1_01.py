@@ -72,32 +72,13 @@ chosen_aufgabe = 'a'
 #%% visualisation: 
 plt.close('all')
 
-if chosen_aufgabe == 'a':
-    u0 = np.array([0,1])
-    tau = 0.1
-    nbr_Steps = 100
-    
-    x = []
-    y = []
-    res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
+u0 = np.array([0,1])
+tau = 0.1
+nbr_Steps = 100
 
-if chosen_aufgabe == 'b':
-    u0 = np.array([0,1])
-    tau = 0.1
-    nbr_Steps = 100
-    
-    x = []
-    y = []
-    res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
-
-if chosen_aufgabe == 'c':
-    u0 = np.array([0,1])
-    tau = 0.1
-    nbr_Steps = 100
-    
-    x = []
-    y = []
-    res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
+x = []
+y = []
+res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
 
 figure, ax = plt.subplots()
 
