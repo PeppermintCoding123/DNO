@@ -40,9 +40,11 @@ class F_c:
 def newton(F, x0):
     F_ = F
     xk = x0
+    Fd = F_.derivative()
+    Fd_invers = (np.linalg.solve(Fd, np.eye(Fd[0].size)))
     for i in range (10):
-        if xk != 0:
-            xk1 = xk - 1/F_.derivative() * F_.__call__(xk)
+        if np.linalg.norm(xk) != 0:
+            xk1 = xk - (Fd_invers * F_.__call__(xk))
             xk = xk1
         else:
             break
@@ -85,15 +87,21 @@ def impliciteEuler(u0, tau, nbr_Steps, F):
     res = []
     u_tk = u0
     
+    u_tk_x = u_tk[0]
+    
     res.append(u_tk) # Step for tau = 0
     
     for t in range(1, nbr_Steps):
+        u_tkPlus1_x  = u_tk_x + tau
         u_tkPlus1 = u_tk
         for i in range(10): # with newton we solve the equation of G, therefore finding the x, that is closest to u_ktplus1
             u_tkPlus1 = newton(G, u_tkPlus1)
             
-        res.append(np.hstack((u_tkPlus1[0], u_tkPlus1[1])))
+        res.append(np.hstack((u_tkPlus1_x, u_tkPlus1[1])))
+        
+        # Prepare for next step
         u_tk = u_tkPlus1
+        u_tk_x = u_tkPlus1_x
         
     return np.array(res)
 #%% 
