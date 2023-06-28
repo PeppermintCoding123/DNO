@@ -14,11 +14,15 @@ def F_call (u, aufgabe):
         delta_u = A @ u
         return delta_u
     if aufgabe == 'c':
-        delta_u_up = np.sqt(u[1])
-        delta_u_down = -2 * u[0] * delta_u_up
-        delta_u = np.array([[delta_u_up],[delta_u_down]])
-        return delta_u
-    raise ValueError('Not known Aufgabe')
+        if u[1] < 0:
+            return np.array([0,0])
+        else:
+            delta_u_up = np.sqrt(u[1])
+            delta_u_down = -2 * u[0] * delta_u_up
+            delta_u = np.array([delta_u_up, delta_u_down])
+            return delta_u
+    else:
+        raise ValueError('Not known Aufgabe')
 
 def F_derivative(aufgabe):
     if aufgabe == 'a':
@@ -56,6 +60,14 @@ def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
 
 #%%
 # choose exact exersise to display from ('a', 'b', 'c')
+'''
+chosen_aufgabe = str(input('Wählen Sie zwischen den Anfangswertproblemen a), b) und c).'))
+if chosen_aufgabe != 'a':
+    if chosen_aufgabe != 'b':
+        if chosen_aufgabe != 'c':
+            print("Es gibt nur die Möglichkeiten a), b) und c).")
+            chosen_aufgabe = str(input('Wählen Sie zwischen den Anfangswertproblemen a), b) und c).'))
+'''
 chosen_aufgabe = 'a'
 #%% visualisation: 
 plt.close('all')
@@ -69,22 +81,40 @@ if chosen_aufgabe == 'a':
     y = []
     res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
 
-    figure, ax = plt.subplots()
-
-    ax.set_xlim(res[0,0],res[-1,0])
-    ax.set_ylim(-5,5)
-
-    line, = ax.plot(0,0)
-
-    def animation_function(i):
-        x.append(res[i,0])
-        y.append(res[i,1])
-        
-        line.set_xdata(x)
-        line.set_ydata(y)
-        return line,
-     
-    animation = FuncAnimation(figure, animation_function, frames = np.arange(0,100,1), interval = 70, repeat = False)
+if chosen_aufgabe == 'b':
+    u0 = np.array([0,1])
+    tau = 0.1
+    nbr_Steps = 100
     
+    x = []
+    y = []
+    res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
 
-    plt.show()
+if chosen_aufgabe == 'c':
+    u0 = np.array([0,1])
+    tau = 0.1
+    nbr_Steps = 100
+    
+    x = []
+    y = []
+    res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
+
+figure, ax = plt.subplots()
+
+ax.set_xlim(res[0,0],res[-1,0])
+ax.set_ylim(-5,5)
+
+line, = ax.plot(0,0)
+
+def animation_function(i):
+    x.append(res[i,0])
+    y.append(res[i,1])
+    
+    line.set_xdata(x)
+    line.set_ydata(y)
+    return line,
+ 
+animation = FuncAnimation(figure, animation_function, frames = np.arange(0,100,1), interval = 70, repeat = False)
+
+
+plt.show()
