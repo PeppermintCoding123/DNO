@@ -65,13 +65,20 @@ def impliciteEuler(u0, tau, nbr_Steps, aufgabe):
     u_tk = u0
     res.append(u_tk)
     
+    u_tk_x = u_tk[0]
+    
     for k in range(1, nbr_Steps+1):
+        u_tk_xPlus1 = u_tk_x + tau
         tmp = lambda u_tkPlus1: u_tkPlus1 - u_tk - tau * F_call(u_tkPlus1, aufgabe)
         u_tkPlus1 = fsolve(tmp, np.zeros(u0_shape))
-        res.append(u_tkPlus1)
+        u_tkPlus1_y = u_tkPlus1[1]
+        res.append(np.hstack((u_tk_xPlus1, u_tkPlus1_y)))
+        
+        # prepare for next step
+        u_tk_x = u_tk_xPlus1
         u_tk = u_tkPlus1
         
-    return res
+    return np.array(res)
 #%%
 # choose exact exersise to display from ('a', 'b', 'c')
 '''
