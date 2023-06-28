@@ -135,3 +135,46 @@ animation = FuncAnimation(figure, animation_function, frames = np.arange(0,100,1
 
 
 plt.show()
+
+"""
+other version of plot that should work for 2 values at the same time:
+#%% visualisation: 
+plt.close('all')
+
+u0 = np.array([0,1])
+tau = 0.1
+nbr_Steps = 100
+
+figure, ax = plt.subplots()
+x = []
+y_analytical = []
+y_explEuler = []
+line_ana, = plt.plot([], [], 'r', animated=True)
+line_expEul, = plt.plot([], [], 'b', animated=True)
+
+
+# apply functions
+expEuler_res = explisiteEuler(u0, tau, nbr_Steps, chosen_aufgabe)
+analytical_res = analytic_solution(chosen_aufgabe)
+
+ax.set_xlim(expEuler_res[0,0],expEuler_res[-1,0])
+ax.set_ylim(-5,5)
+
+
+
+def animation_function(i):
+    x.append(expEuler_res[i,0])
+    y_analytical.append(analytical_res[i,0])
+    y_explEuler.append(expEuler_res[i,1])
+    
+    line_ana.set_xdata(x)
+    line_expEul.set_xdata(x)
+    line_ana.set_ydata(y_analytical)
+    line_expEul.set_ydata(y_explEuler)
+    return line_ana, line_expEul
+ 
+animation = FuncAnimation(figure, animation_function, frames = np.arange(0,100,1), interval = 70, repeat = False)
+
+
+plt.show()
+"""
