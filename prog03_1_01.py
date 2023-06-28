@@ -44,7 +44,7 @@ def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
     
     res.append(u_tk) # Step for tau = 0
     
-    for t in range(1, nbr_Steps+1):
+    for k in range(1, nbr_Steps+1):
         u_tkPlus1_x = u_tk_x + tau
         F_tk = F_call(u_tk, aufgabe)
         Ftk = F_tk * tau
@@ -58,6 +58,19 @@ def explisiteEuler(u0, tau, nbr_Steps, aufgabe):
           
     return np.array(res)
 
+def impliciteEuler(u0, tau, nbr_Steps, aufgabe):
+    u0_shape = np.shape(u0)
+    res = []
+    u_tk = u0
+    res.append(u_tk)
+    
+    for k in range(1, nbr_Steps+1):
+        tmp = lambda u_tkPlus1: u_tkPlus1 - u_tk - tau * F_call(u_tkPlus1, aufgabe)
+        u_tkPlus1 = fsolve(tmp, np.zeros(u0_shape))
+        res.append(u_tkPlus1)
+        u_tk = u_tkPlus1
+        
+    return res
 #%%
 # choose exact exersise to display from ('a', 'b', 'c')
 '''
