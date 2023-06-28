@@ -74,8 +74,28 @@ def explisiteEuler(u0, tau, nbr_Steps, F):
         
 #%%
 def impliciteEuler(u0, tau, nbr_Steps, F):
-    # TODO: do as newton
-    pass
+    # reformulate the problem as a fiffarent equasion, with x = utkplus1, u = utk
+    
+    class G:
+        def __call__(u, x, tau, F):
+            return x - tau * F.__call__(x) - u
+        def derivative():
+            pass
+    
+    res = []
+    u_tk = u0
+    
+    res.append(u_tk) # Step for tau = 0
+    
+    for t in range(1, nbr_Steps):
+        u_tkPlus1 = u_tk
+        for i in range(10): # with newton we solve the equation of G, therefore finding the x, that is closest to u_ktplus1
+            u_tkPlus1 = newton(G, u_tkPlus1)
+            
+        res.append(np.hstack((u_tkPlus1[0], u_tkPlus1[1])))
+        u_tk = u_tkPlus1
+        
+    return np.array(res)
 #%% 
 ''' TODO: Implement Implicite 
     - probably implement a function like f_explicite and do the strange turn-around calculations there
