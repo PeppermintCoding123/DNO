@@ -141,7 +141,7 @@ if chosen_aufgabe == 'a':
         line.set_ydata(y)
         return line,
      
-    animation = FuncAnimation(figure, animation_function, frames = np.arange(0,100,1))
+    animation = FuncAnimation(figure, animation_function, frames = np.arange(0,100,1), repeat = False)
 
     plt.show()
 
